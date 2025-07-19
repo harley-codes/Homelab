@@ -1,0 +1,75 @@
+version: "3.8"
+
+services:
+  service-guacamole-client:
+    image: guacamole/guacamole:1.6.0
+    container_name: service-guacamole-client
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - hotbox
+    depends_on:
+      - service-guacamole-guacd
+      - service-guacamole-db
+    environment:
+      - GUACD_HOSTNAME=service-guacamole-guacd
+      - MYSQL_HOSTNAME=service-guacamole-db
+      - MYSQL_DATABASE=guacamole_user
+      - MYSQL_PORT=3306
+      - MYSQL_USERNAME=guacamole_usr
+      - MYSQL_PASSWORD=${VAR_MYSQL_PASSWORD}
+      # This section is currently disabled, and I strongly recommend against enabling it with the static value workaround.
+      # Guacamole need to implement the state parameter as per => https://auth0.com/docs/secure/attack-protection/state-parameters
+      # However the likelihood of this being implemented is low => https://issues.apache.org/jira/browse/GUACAMOLE-808
+      # - OPENID_AUTHORIZATION_ENDPOINT=${VAR_OIDC_ROUTE_AUTH}
+      # - OPENID_JWKS_ENDPOINT=${VAR_OIDC_ROUTE_JKWS}
+      # - OPENID_ISSUER=${VAR_OIDC_ENDPOINT}
+      # - OPENID_CLIENT_ID=service-guacamole
+      # - OPENID_REDIRECT_URI=${VAR_OIDC_REDIRECT_URI}
+      # - OPENID_USERNAME_CLAIM_TYPE=preferred_username
+      # - OPENID_GROUPS_CLAIM_TYPE=groups
+      # - OPENID_SCOPE=openid profile groups email
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.service-guacamole.rule: "Host(`${VAR_PROXY_HOST_ROUTE}`)"
+      traefik.http.routers.service-guacamole.entrypoints: "websecure"
+      traefik.http.routers.service-guacamole.tls: "true"
+      traefik.http.routers.service-guacamole.tls.certresolver: "cloudflare"
+      # This is the best solution until oidc state is implemented.
+      traefik.http.routers.service-guacamole.middlewares: "service-proxy-authelia@docker, service-guacamole-guacprefix"
+      # traefik.http.routers.service-guacamole.middlewares: "service-guacamole-guacprefix"
+      traefik.http.middlewares.service-guacamole-guacprefix.addprefix.prefix: "/guacamole"
+      traefik.http.services.service-guacamole.loadbalancer.server.port: "8080"
+
+  service-guacamole-guacd:
+    image: guacamole/guacd:1.6.0
+    container_name: service-guacamole-guacd
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - hotbox
+
+  service-guacamole-db:
+    image: mariadb:10.9.5
+    container_name: service-guacamole-db
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - hotbox
+    environment:
+      - MYSQL_DATABASE=guacamole_db
+      - MYSQL_USER=guacamole_user
+      - MYSQL_PASSWORD=${VAR_MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${VAR_MYSQL_ROOT_PASSWORD}
+    volumes:
+      - "service-guacamole-db:/var/lib/mysql"
+
+networks:
+  hotbox:
+    external: true
+
+volumes:
+  service-guacamole-db:

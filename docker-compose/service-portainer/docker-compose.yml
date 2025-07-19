@@ -16,7 +16,7 @@ services:
       - 9443:9443
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - service_portainer_host_data:/data
+      - service-portainer-host-data:/data
     labels:
       traefik.enable: "true"
       traefik.http.routers.service-portainer-host.rule: "Host(`${VAR_PROXY_HOST_ROUTE}`)"
@@ -30,4 +30,4 @@ networks:
     external: true
 
 volumes:
-  service_portainer_host_data:
+  service-portainer-host-data:
