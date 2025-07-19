@@ -1,0 +1,1 @@
+VAR_PROXY_HOST_ROUTE=contoso docker compose up -d

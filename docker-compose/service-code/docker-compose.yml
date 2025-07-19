@@ -8,28 +8,28 @@ services:
     security_opt:
       - no-new-privileges:true
     networks:
-      - proxy
+      - hotbox
     environment:
       - PUID=${VAR_PUID}
       - PGID=${VAR_PGID}
       - TZ=${VAR_TZ}
       - HASHED_PASSWORD=${VAR_PASSWORD_HASH}
       - PWA_APPNAME=${VAR_APPNAME}
-      - PROXY_DOMAIN=${VAR_PROXY_HOST}
+      - PROXY_DOMAIN=${VAR_PROXY_HOST_ROUTE}
       - DEFAULT_WORKSPACE=/home/coder/dev
     volumes:
       - service-code-vscode-config:/config
       - service-code-vscode-dev:/home/coder/dev
     labels:
       traefik.enable: "true"
-      traefik.http.routers.service-code-vscode.rule: "Host(`${VAR_PROXY_HOST}`)"
+      traefik.http.routers.service-code-vscode.rule: "Host(`${VAR_PROXY_HOST_ROUTE}`)"
       traefik.http.routers.service-code-vscode.entrypoints: "websecure"
       traefik.http.routers.service-code-vscode.tls: "true"
       traefik.http.routers.service-code-vscode.tls.certresolver: "cloudflare"
       traefik.http.services.service-code-vscode.loadbalancer.server.port: "8443"
 
 networks:
-  proxy:
+  hotbox:
     external: true
 
 volumes:

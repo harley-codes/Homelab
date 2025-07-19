@@ -1,0 +1,33 @@
+version: "3.8"
+
+services:
+  service-portainer-host:
+    image: portainer/portainer-ce:lts
+    container_name: service-portainer-host
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - hotbox
+    ports:
+      # - 8000:8000 Port for Portainer Agent (optional, for remote Docker environments)
+      # - 8000:8000
+      # - 9443:9443 Necessary for HTTPS access
+      - 9443:9443
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - service_portainer_host_data:/data
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.service-portainer-host.rule: "Host(`${VAR_PROXY_HOST_ROUTE}`)"
+      traefik.http.routers.service-portainer-host.entrypoints: "websecure"
+      traefik.http.routers.service-portainer-host.tls: "true"
+      traefik.http.routers.service-portainer-host.tls.certresolver: "cloudflare"
+      traefik.http.services.service-portainer-host.loadbalancer.server.port: "9000"
+
+networks:
+  hotbox:
+    external: true
+
+volumes:
+  service_portainer_host_data:
