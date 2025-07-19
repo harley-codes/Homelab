@@ -5,7 +5,6 @@ services:
     image: lscr.io/linuxserver/code-server:latest
     container_name: service-code-vscode
     restart: unless-stopped
-    user: "${VAR_PUID}:${VAR_PGID}"
     security_opt:
       - no-new-privileges:true
     networks:
