@@ -9,8 +9,6 @@ services:
       - no-new-privileges:true
     networks:
       - proxy
-    ports:
-      - "8443:8443"
     environment:
       - PUID=${VAR_PUID}
       - PGID=${VAR_PGID}
