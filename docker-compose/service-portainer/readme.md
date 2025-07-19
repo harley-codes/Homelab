@@ -15,9 +15,10 @@ VAR_PROXY_HOST_ROUTE=this.contoso.com docker compose up -d
 When your ready to enable single sign on. This can be done from the Portainer web interface.
 
 Authelia has a community written document that converts the setup:  
-https://www.authelia.com/integration/openid-connect/portainer/
+https://www.authelia.com/integration/openid-connect/portainer/  
+However will already be done in the repo files docker-compose/service-proxy.
 
-Goto https://portainer.contoso.com/#!/settings/auth  
+Goto https://this.contoso.com/#!/settings/auth  
 ~ Set authentication method to OAuth  
 ~ Toggle **Use SSO** if not already enabled.  
 ~ Enter client details as follows:
