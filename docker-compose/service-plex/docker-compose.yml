@@ -1,0 +1,32 @@
+version: "3.8"
+services:
+  service-plex-server:
+    image: lscr.io/linuxserver/plex:latest
+    container_name: service-plex-server
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - hotbox
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - VERSION=docker
+      - PLEX_CLAIM=${VAR_PLEX_CLAIM}
+    volumes:
+      - "service-plex-server-config:/config"
+      - "${VAR_MEDIA_PATH}:/media:ro"
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.plex-server.rule: "Host(`${VAR_PROXY_HOST_ROUTE}`)"
+      traefik.http.routers.plex-server.entrypoints: "websecure"
+      traefik.http.routers.plex-server.tls: "true"
+      traefik.http.routers.plex-server.tls.certresolver: "cloudflare"
+      traefik.http.services.plex-server.loadbalancer.server.port: "32400"
+
+networks:
+  hotbox:
+    external: true
+
+volumes:
+  service-plex-server-config:

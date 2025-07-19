@@ -1,0 +1,6 @@
+version: "3.8"
+
+services:
+  service-plex-server:
+    ports:
+      - "32400:32400"
