@@ -1,0 +1,10 @@
+users:
+  ${VAR_LOCAL_AUTHELIA_AUTH_USERNAME}:
+    disabled: false
+    displayname: "${VAR_LOCAL_AUTHELIA_AUTH_DISPLAY_NAME}"
+    password: "${VAR_LOCAL_AUTHELIA_AUTH_PASSWORD_HASH}"
+    # to generate the password use 'docker run authelia/authelia:latest authelia crypto hash generate argon2 --password 'password''
+    email: "${VAR_LOCAL_AUTHELIA_AUTH_EMAIL}"
+    groups:
+      - "admins"
+      - "dev"

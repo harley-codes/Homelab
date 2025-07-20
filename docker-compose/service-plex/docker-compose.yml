@@ -18,7 +18,7 @@ services:
       - "${VAR_MEDIA_PATH}:/media:ro"
     labels:
       traefik.enable: "true"
-      traefik.http.routers.plex-server.rule: "Host(`${VAR_PROXY_HOST_ROUTE}`)"
+      traefik.http.routers.plex-server.rule: "Host(`${VAR_GLOBAL_PLEX_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}`)"
       traefik.http.routers.plex-server.entrypoints: "websecure"
       traefik.http.routers.plex-server.tls: "true"
       traefik.http.routers.plex-server.tls.certresolver: "cloudflare"

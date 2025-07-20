@@ -15,14 +15,14 @@ services:
       - TZ=${VAR_TZ}
       - HASHED_PASSWORD=${VAR_PASSWORD_HASH}
       - PWA_APPNAME=${VAR_APPNAME}
-      - PROXY_DOMAIN=${VAR_PROXY_HOST_ROUTE}
+      - PROXY_DOMAIN=${VAR_GLOBAL_CODE_SERVER_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}
       - DEFAULT_WORKSPACE=/home/coder/dev
     volumes:
       - service-code-vscode-config:/config
       - service-code-vscode-dev:/home/coder/dev
     labels:
       traefik.enable: "true"
-      traefik.http.routers.service-code-vscode.rule: "Host(`${VAR_PROXY_HOST_ROUTE}`)"
+      traefik.http.routers.service-code-vscode.rule: "Host(`${VAR_GLOBAL_CODE_SERVER_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}`)"
       traefik.http.routers.service-code-vscode.entrypoints: "websecure"
       traefik.http.routers.service-code-vscode.tls: "true"
       traefik.http.routers.service-code-vscode.tls.certresolver: "cloudflare"

@@ -1,0 +1,95 @@
+services:
+  service-proxy-authelia:
+    image: authelia/authelia
+    container_name: service-proxy-authelia
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - hotbox
+    healthcheck:
+      disable: true
+    environment:
+      TZ: ${VAR_GLOBAL_TIMEZONE}
+      X_AUTHELIA_CONFIG_FILTERS: template
+    volumes:
+      - ./configuration/authelia:/config:ro
+      - service-proxy-authelia-output:/var/authelia:rw
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.authelia.rule: "Host(`${VAR_GLOBAL_AUTHELIA_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}`)"
+      traefik.http.routers.authelia.entrypoints: "websecure"
+      traefik.http.routers.authelia.tls: "true"
+      traefik.http.routers.authelia.tls.certresolver: "cloudflare"
+      traefik.http.middlewares.authelia.forwardauth.address: "http://service-proxy-authelia:9091/api/verify?rd=https://${VAR_GLOBAL_AUTHELIA_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}"
+      traefik.http.middlewares.authelia.forwardauth.trustForwardHeader: "true"
+      traefik.http.middlewares.authelia.forwardauth.authResponseHeaders: "Remote-User,Remote-Groups,Remote-Name,Remote-Email"
+
+  service-proxy-traefik:
+    image: traefik:v3.4
+    container_name: service-proxy-traefik
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - proxy
+    ports:
+      - "80:80"
+      - "443:443/tcp"
+      - "443:443/udp"
+      - "8080:8080"
+    environment:
+      - CF_API_EMAIL=${VAR_LOCAL_CLOUDFLARE_API_EMAIL}
+      - CF_DNS_API_TOKEN=${VAR_LOCAL_CLOUDFLARE_API_DNS_TOKEN}
+    volumes:
+      - ./configuration/traefik:/etc/traefik:ro
+      - service-proxy-traefik-output:/var/traefik:rw
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.api.rule: "Host(`${VAR_GLOBAL_TRAEFIK_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}`)"
+      traefik.http.routers.api.entrypoints: "websecure"
+      traefik.http.routers.api.service: "api@internal"
+      traefik.http.routers.api.tls: "true"
+      traefik.http.routers.api.tls.certresolver: "cloudflare"
+      traefik.http.routers.api.middlewares: "authelia@docker"
+
+  service-proxy-whoami-unsecure:
+    image: traefik/whoami
+    container_name: service-proxy-whoami-unsecure
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - hotbox
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.whoami-unsecure.rule: "Host(`${VAR_GLOBAL_WHOAMI_UNSECURE_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}`)"
+      traefik.http.routers.whoami-unsecure.entrypoints: "websecure"
+      traefik.http.routers.whoami-unsecure.tls: "true"
+      traefik.http.routers.whoami-unsecure.tls.certresolver: "cloudflare"
+      traefik.http.routers.whoami-unsecure.middlewares: "authelia@docker"
+
+  service-proxy-whoami-secure:
+    image: traefik/whoami
+    container_name: service-proxy-whoami-secure
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - hotbox
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.whoami-secure.rule: "Host(`${VAR_GLOBAL_WHOAMI_SECURE_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}`)"
+      traefik.http.routers.whoami-secure.entrypoints: "websecure"
+      traefik.http.routers.whoami-secure.tls: "true"
+      traefik.http.routers.whoami-secure.tls.certresolver: "cloudflare"
+      traefik.http.routers.whoami-secure.middlewares: "authelia@docker"
+
+networks:
+  hotbox:
+    external: true
+
+volumes:
+  service-proxy-authelia-output:
+  service-proxy-traefik-output:

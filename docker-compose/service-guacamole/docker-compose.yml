@@ -32,7 +32,7 @@ services:
       # - OPENID_SCOPE=openid profile groups email
     labels:
       traefik.enable: "true"
-      traefik.http.routers.service-guacamole.rule: "Host(`${VAR_PROXY_HOST_ROUTE}`)"
+      traefik.http.routers.service-guacamole.rule: "Host(`${VAR_GLOBAL_GUACAMOLE_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}`)"
       traefik.http.routers.service-guacamole.entrypoints: "websecure"
       traefik.http.routers.service-guacamole.tls: "true"
       traefik.http.routers.service-guacamole.tls.certresolver: "cloudflare"
