@@ -6,8 +6,8 @@
   <tr>
     <th>Installation</th>
     <th>Service</th>
-    <th></th>
-	<th></th>
+    <th>Path</th>
+	<th>Description</th>
   </tr>
   <tr>
     <td>docker-compose</td>
