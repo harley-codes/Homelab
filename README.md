@@ -13,13 +13,13 @@
     <td>docker-compose</td>
     <td>Code Server</td>
     <td><a href="docker-compose/service-code/">service-code/</a></td>
-	<td>VS Code</td>
+	<td>VS Code in a browser</td>
   </tr>
   <tr>
     <td>docker-compose</td>
     <td>Apache Guacamole</td>
     <td><a href="docker-compose/service-guacamole/readme.md">service-guacamole/readme.md</a></td>
-	<td>Remote Management</td>
+	<td>Web RDP, SHH, etc</td>
   </tr>
   <tr>
     <td>docker-compose</td>
