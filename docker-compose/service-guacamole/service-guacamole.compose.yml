@@ -32,15 +32,15 @@ services:
       # - OPENID_SCOPE=openid profile groups email
     labels:
       traefik.enable: "true"
-      traefik.http.routers.service-guacamole.rule: "Host(`${VAR_GLOBAL_GUACAMOLE_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}`)"
-      traefik.http.routers.service-guacamole.entrypoints: "websecure"
-      traefik.http.routers.service-guacamole.tls: "true"
-      traefik.http.routers.service-guacamole.tls.certresolver: "cloudflare"
+      traefik.http.routers.service-guacamole-client.rule: "Host(`${VAR_GLOBAL_GUACAMOLE_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}`)"
+      traefik.http.routers.service-guacamole-client.entrypoints: "websecure"
+      traefik.http.routers.service-guacamole-client.tls: "true"
+      traefik.http.routers.service-guacamole-client.tls.certresolver: "cloudflare"
       # This is the best solution until oidc state is implemented.
-      traefik.http.routers.service-guacamole.middlewares: "service-proxy-authelia@docker, service-guacamole-guacprefix"
+      traefik.http.routers.service-guacamole-client.middlewares: "service-proxy-authelia@docker, service-guacamole-client-guacprefix"
       # traefik.http.routers.service-guacamole.middlewares: "service-guacamole-guacprefix"
-      traefik.http.middlewares.service-guacamole-guacprefix.addprefix.prefix: "/guacamole"
-      traefik.http.services.service-guacamole.loadbalancer.server.port: "8080"
+      traefik.http.middlewares.service-guacamole-client-guacprefix.addprefix.prefix: "/guacamole"
+      traefik.http.services.service-guacamole-client.loadbalancer.server.port: "8080"
 
   service-guacamole-guacd:
     image: guacamole/guacd:1.6.0

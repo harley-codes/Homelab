@@ -17,13 +17,13 @@ services:
       - service-proxy-authelia-output:/var/authelia:rw
     labels:
       traefik.enable: "true"
-      traefik.http.routers.authelia.rule: "Host(`${VAR_GLOBAL_AUTHELIA_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}`)"
-      traefik.http.routers.authelia.entrypoints: "websecure"
-      traefik.http.routers.authelia.tls: "true"
-      traefik.http.routers.authelia.tls.certresolver: "cloudflare"
-      traefik.http.middlewares.authelia.forwardauth.address: "http://service-proxy-authelia:9091/api/verify?rd=https://${VAR_GLOBAL_AUTHELIA_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}"
-      traefik.http.middlewares.authelia.forwardauth.trustForwardHeader: "true"
-      traefik.http.middlewares.authelia.forwardauth.authResponseHeaders: "Remote-User,Remote-Groups,Remote-Name,Remote-Email"
+      traefik.http.routers.service-proxy-authelia.rule: "Host(`${VAR_GLOBAL_AUTHELIA_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}`)"
+      traefik.http.routers.service-proxy-authelia.entrypoints: "websecure"
+      traefik.http.routers.service-proxy-authelia.tls: "true"
+      traefik.http.routers.service-proxy-authelia.tls.certresolver: "cloudflare"
+      traefik.http.middlewares.service-proxy-authelia.forwardauth.address: "http://service-proxy-authelia:9091/api/verify?rd=https://${VAR_GLOBAL_AUTHELIA_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}"
+      traefik.http.middlewares.service-proxy-authelia.forwardauth.trustForwardHeader: "true"
+      traefik.http.middlewares.service-proxy-authelia.forwardauth.authResponseHeaders: "Remote-User,Remote-Groups,Remote-Name,Remote-Email"
 
   service-proxy-traefik:
     image: traefik:v3.4
@@ -47,12 +47,12 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     labels:
       traefik.enable: "true"
-      traefik.http.routers.api.rule: "Host(`${VAR_GLOBAL_TRAEFIK_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}`)"
-      traefik.http.routers.api.entrypoints: "websecure"
-      traefik.http.routers.api.service: "api@internal"
-      traefik.http.routers.api.tls: "true"
-      traefik.http.routers.api.tls.certresolver: "cloudflare"
-      traefik.http.routers.api.middlewares: "authelia@docker"
+      traefik.http.routers.service-proxy-traefik-api.rule: "Host(`${VAR_GLOBAL_TRAEFIK_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}`)"
+      traefik.http.routers.service-proxy-traefik-api.entrypoints: "websecure"
+      traefik.http.routers.service-proxy-traefik-api.service: "api@internal"
+      traefik.http.routers.service-proxy-traefik-api.tls: "true"
+      traefik.http.routers.service-proxy-traefik-api.tls.certresolver: "cloudflare"
+      traefik.http.routers.service-proxy-traefik-api.middlewares: "service-proxy-authelia@docker"
 
   service-proxy-whoami-unsecure:
     image: traefik/whoami
@@ -64,11 +64,11 @@ services:
       - hotbox
     labels:
       traefik.enable: "true"
-      traefik.http.routers.whoami-unsecure.rule: "Host(`${VAR_GLOBAL_WHOAMI_UNSECURE_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}`)"
-      traefik.http.routers.whoami-unsecure.entrypoints: "websecure"
-      traefik.http.routers.whoami-unsecure.tls: "true"
-      traefik.http.routers.whoami-unsecure.tls.certresolver: "cloudflare"
-      traefik.http.routers.whoami-unsecure.middlewares: "authelia@docker"
+      traefik.http.routers.service-proxy-whoami-unsecure.rule: "Host(`${VAR_GLOBAL_WHOAMI_UNSECURE_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}`)"
+      traefik.http.routers.service-proxy-whoami-unsecure.entrypoints: "websecure"
+      traefik.http.routers.service-proxy-whoami-unsecure.tls: "true"
+      traefik.http.routers.service-proxy-whoami-unsecure.tls.certresolver: "cloudflare"
+      traefik.http.routers.service-proxy-whoami-unsecure.middlewares: "service-proxy-authelia@docker"
 
   service-proxy-whoami-secure:
     image: traefik/whoami
@@ -80,11 +80,11 @@ services:
       - hotbox
     labels:
       traefik.enable: "true"
-      traefik.http.routers.whoami-secure.rule: "Host(`${VAR_GLOBAL_WHOAMI_SECURE_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}`)"
-      traefik.http.routers.whoami-secure.entrypoints: "websecure"
-      traefik.http.routers.whoami-secure.tls: "true"
-      traefik.http.routers.whoami-secure.tls.certresolver: "cloudflare"
-      traefik.http.routers.whoami-secure.middlewares: "authelia@docker"
+      traefik.http.routers.service-proxy-whoami-secure.rule: "Host(`${VAR_GLOBAL_WHOAMI_SECURE_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}`)"
+      traefik.http.routers.service-proxy-whoami-secure.entrypoints: "websecure"
+      traefik.http.routers.service-proxy-whoami-secure.tls: "true"
+      traefik.http.routers.service-proxy-whoami-secure.tls.certresolver: "cloudflare"
+      traefik.http.routers.service-proxy-whoami-secure.middlewares: "service-proxy-authelia@docker"
 
 networks:
   hotbox:
