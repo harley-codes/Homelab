@@ -1,6 +1,6 @@
 services:
   service-komodo-mongo:
-    image: service-komodo-mongo
+    image: mongo
     container_name: service-komodo-mongo
     restart: unless-stopped
     security_opt:
