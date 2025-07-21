@@ -3,10 +3,10 @@
 ## Docker-Compose
 
 All configuration and compose files have been built for a seamless deployment experience.  
-Just pull down the repo, create the necessary .env files from the .env.template.  
+Just pull down the repo, create the necessary .env files from the .env.template,  
 Then run the _docker compose_ command or use a GUI like Komodo.
 
-Get started here with the overall [readme](docker-compose\readme.md).
+Get started here with the overall [readme](docker-compose/readme.md).
 
 <table>
   <tr>
