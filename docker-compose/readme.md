@@ -13,4 +13,15 @@ docker network create hotbox
 
 ## 📦 Environment 📦
 
+### Global Settings
+
 Make note of the global [.env.template](./.env.template). Apart from Portainer or Komodo, other services will make use of them. It is the expectation that these be set on the host, or via other means (Komodo Global Vars); and available to all other stacks.
+
+### Security
+
+Don't forget to always lock down your .env files that have sensitive information.
+
+```sh
+sudo chmod 600 .env
+sudo chown root:root .env
+```
