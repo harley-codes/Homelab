@@ -10,7 +10,7 @@
   </tr>
   <tr>
     <td>docker-compose</td>
-    <td><a href="docker-compose/service-code/">Code Server</a></td>
+    <td><a href="docker-compose/service-code/service-code.compose.yml">Code Server</a></td>
 	<td>VS Code in a browser</td>
   </tr>
   <tr>
@@ -25,7 +25,7 @@
   </tr>
   <tr>
     <td>docker-compose</td>
-    <td><a href="docker-compose/service-plex/">Plex Media Server</a></td>
+    <td><a href="docker-compose/service-plex/service-plex.compose.yml">Plex Media Server</a></td>
 	<td>Streaming | HW Transcoding</td>
   </tr>
   <tr>
