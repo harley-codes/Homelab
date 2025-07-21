@@ -13,5 +13,5 @@ So with that, we should be able to easily double up and wrap additional variable
 ```bash
 # CD into docker-compose\service-komodo
 cat .env .env.config > .env.merged
-docker compose -p service-komodo -f docker-compose.yml --env-file .env.merged up -d
+docker compose -p service-komodo -f service-komodo.compose.yml --env-file .env.merged up -d
 ```

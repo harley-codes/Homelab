@@ -7,7 +7,7 @@ There is only one variable set in the docker compose file.
 It can be set on the host, but for a more simple approach, you can run the **_compose up -d_** command with the variable piped through.
 
 ```bash
-VAR_PROXY_HOST_ROUTE=this.contoso.com docker compose up -d
+VAR_PROXY_HOST_ROUTE=this.contoso.com docker compose -p service-portainer -f service-portainer.compose.yml --env-file .env up -d
 ```
 
 ## 🔑 OIDC 🔑
