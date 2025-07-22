@@ -14,56 +14,47 @@ ENV_FILES=(
     "../.env"
 )
 
-# 1) Load all .env files into VARS[]
-declare -A VARS
-for envfile in "${ENV_FILES[@]}"; do
-  if [[ ! -f "$envfile" ]]; then
-    echo "❌ Env file not found: $envfile" >&2
-    exit 1
-  fi
+declare -A env_vars
 
-  while IFS= read -r line; do
-    # skip blank lines and any line containing '#' 
-    [[ -z "$line" ]] && continue
-    [[ "$line" == *\#* ]] && continue
-
-    # must be KEY=VALUE
-    if [[ "$line" == *=* ]]; then
-      key="${line%%=*}"
-      val="${line#*=}"
-      # strip whitespace around key/val
-      key="${key//[[:space:]]/}"
-      val="${val//[[:space:]]/}"
-      VARS["$key"]="$val"
+# Load env vars into associative array, stripping quotes if present
+for env_file in "${ENV_FILES[@]}"; do
+    if [[ -f "$env_file" ]]; then
+        while IFS= read -r line; do
+            [[ -z "$line" || "$line" =~ ^[[:space:]]*# ]] && continue
+            if [[ "$line" =~ ^([A-Za-z_][A-Za-z0-9_]*)=(.*)$ ]]; then
+                key="${BASH_REMATCH[1]}"
+                value="${BASH_REMATCH[2]}"
+                # Strip matching quotes (single or double)
+                if [[ "$value" =~ ^\"(.*)\"$ ]]; then
+                    value="${BASH_REMATCH[1]}"
+                elif [[ "$value" =~ ^\'(.*)\'$ ]]; then
+                    value="${BASH_REMATCH[1]}"
+                fi
+                env_vars["$key"]="$value"
+            fi
+        done < "$env_file"
     fi
-  done < "$envfile"
 done
 
-# 2) Render each template → target
+# Replace placeholders in templates, ignoring ones surrounded by quotes
 for src in "${!CONFIG_FILES[@]}"; do
-  dst="${CONFIG_FILES[$src]}"
+    target="${CONFIG_FILES[$src]}"
 
-  # fail if template missing
-  if [[ ! -f "$src" ]]; then
-    echo "❌ Template not found: $src" >&2
-    exit 1
-  fi
+    # Read full template content
+    template_content=$(<"$src")
 
-  # overwrite target
-  : > "$dst"
+    for var in "${!env_vars[@]}"; do
+        val="${env_vars[$var]}"
 
-  while IFS= read -r line; do
-    # skip any commented/template lines containing '#'
-    [[ -z "$line" ]] && { echo "" >> "$dst"; continue; }
-    [[ "$line" == *\#* ]] && continue
+        # Escape backslashes and & for safe sed replacement
+        escaped_val="${val//\\/\\\\}"
+        escaped_val="${escaped_val//&/\\&}"
 
-    # substitute all ${KEY} in this line
-    for key in "${!VARS[@]}"; do
-      line="${line//\$\{$key\}/${VARS[$key]}}"
+        # Replace unquoted ${VAR} occurrences only
+        template_content=$(echo "$template_content" | \
+            sed -E "s#([^\"'])\\\${$var}([^\"'])#\1${escaped_val}\2#g")
     done
 
-    printf '%s\n' "$line" >> "$dst"
-  done < "$src"
-
-  echo "✔ Rendered $src → $dst"
+    # Overwrite target file (create or replace)
+    echo "$template_content" > "$target"
 done

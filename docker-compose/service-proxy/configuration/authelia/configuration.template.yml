@@ -2,7 +2,7 @@ theme: dark
 
 identity_validation:
   reset_password:
-    jwt_secret: ${VAR_LOCAL_AUTHELIA_JWT_SECRET}
+    jwt_secret: "${VAR_LOCAL_AUTHELIA_JWT_SECRET}"
     jwt_lifespan: "5 minutes"
     jwt_algorithm: "HS256"
 
@@ -33,12 +33,12 @@ access_control:
     - domain: ${VAR_GLOBAL_WHOAMI_SECURE_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}
       policy: one_factor
     - domain:
-        - ${VAR_GLOBAL_ROOT_DOMAIN}
+        - "${VAR_GLOBAL_ROOT_DOMAIN}"
         - "*.${VAR_GLOBAL_ROOT_DOMAIN}"
       policy: two_factor
 
 session:
-  secret: ${VAR_LOCAL_AUTHELIA_SESSION_SECRET}
+  secret: "${VAR_LOCAL_AUTHELIA_SESSION_SECRET}"
   cookies:
     - name: authelia_session
       domain: ${VAR_GLOBAL_ROOT_DOMAIN}
@@ -54,7 +54,7 @@ regulation:
   ban_time: "1 hour"
 
 storage:
-  encryption_key: ${VAR_LOCAL_AUTHELIA_STORAGE_ENCRYPTION_KEY}
+  encryption_key: "${VAR_LOCAL_AUTHELIA_STORAGE_ENCRYPTION_KEY}"
   local:
     path: /var/authelia/db.sqlite3
 
@@ -65,7 +65,7 @@ notifier:
 identity_providers:
   oidc:
     enable_client_debug_messages: true
-    hmac_secret: ${VAR_LOCAL_AUTHELIA_OIDC_HMAC_SECRET}
+    hmac_secret: "${VAR_LOCAL_AUTHELIA_OIDC_HMAC_SECRET}"
     jwks:
       # prettier-ignore
       - key: {{ secret "/config/keys/oidc-jwks/private.pem" | mindent 10 "|" | msquote }}
@@ -74,7 +74,7 @@ identity_providers:
       # Were client_secret is the 'Digest', and 'Random Password' you give to the client.
       - client_id: ${VAR_LOCAL_AUTHELIA_OIDC_PORTAINER_CLIENT_ID}
         client_name: "Portainer"
-        client_secret: ${VAR_LOCAL_AUTHELIA_OIDC_PORTAINER_CLIENT_SECRET}
+        client_secret: "${VAR_LOCAL_AUTHELIA_OIDC_PORTAINER_CLIENT_SECRET}"
         public: false
         authorization_policy: "two_factor"
         require_pkce: false
@@ -120,7 +120,7 @@ identity_providers:
         pre_configured_consent_duration: "1 year"
       - client_id: ${VAR_LOCAL_AUTHELIA_OIDC_KOMODO_CLIENT_ID}
         client_name: "Komodo"
-        client_secret: ${VAR_LOCAL_AUTHELIA_OIDC_KOMODO_CLIENT_SECRET}
+        client_secret: "${VAR_LOCAL_AUTHELIA_OIDC_KOMODO_CLIENT_SECRET}"
         public: false
         require_pkce: true
         pkce_challenge_method: "S256"
