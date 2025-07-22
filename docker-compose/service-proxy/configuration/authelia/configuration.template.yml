@@ -34,7 +34,7 @@ access_control:
       policy: one_factor
     - domain:
         - ${VAR_GLOBAL_ROOT_DOMAIN}
-        - *.${VAR_GLOBAL_ROOT_DOMAIN}
+        - "*.${VAR_GLOBAL_ROOT_DOMAIN}"
       policy: two_factor
 
 session:
