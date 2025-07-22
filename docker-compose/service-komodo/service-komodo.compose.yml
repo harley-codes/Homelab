@@ -43,7 +43,7 @@ services:
     labels:
       komodo.skip:
       traefik.enable: "true"
-      traefik.http.routers.service-komodo-core.rule: "Host(`${VAR_LOCAL_KOMODO_HOST}`)"
+      traefik.http.routers.service-komodo-core.rule: "Host(`${VAR_LOCAL_KOMODO_DOMAIN}`)"
       traefik.http.routers.service-komodo-core.entrypoints: "websecure"
       traefik.http.routers.service-komodo-core.tls: "true"
       traefik.http.routers.service-komodo-core.tls.certresolver: "cloudflare"
