@@ -102,7 +102,7 @@ identity_providers:
         require_pkce: false
         pkce_challenge_method: ""
         redirect_uris:
-          - "https://${VAR_GLOBAL_GUACAMOLE_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}
+          - "https://${VAR_GLOBAL_GUACAMOLE_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}"
           - "https://${VAR_GLOBAL_GUACAMOLE_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}/guacamole"
         scopes:
           - "openid"
