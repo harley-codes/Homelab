@@ -27,15 +27,16 @@ load_env_vars() {
                     continue
                 fi
 
-                # Remove quotes if they exist and extract key/value
-                if [[ "$line" =~ ^([^=]+)=(['\"]?)(.*)(['\"]?)$ ]]; then
+                # Split into key and value parts
+                if [[ "$line" =~ ^([^=]+)=(.*)$ ]]; then
                     key="${BASH_REMATCH[1]}"
-                    # Only remove quotes if they match (both opening and closing)
-                    if [[ "${BASH_REMATCH[2]}" == "${BASH_REMATCH[4]}" && -n "${BASH_REMATCH[2]}" ]]; then
-                        value="${BASH_REMATCH[3]}"
-                    else
-                        value="${BASH_REMATCH[2]}${BASH_REMATCH[3]}${BASH_REMATCH[4]}"
+                    value="${BASH_REMATCH[2]}"
+
+                    # Remove surrounding quotes if they exist and match
+                    if [[ "$value" =~ ^\'(.*)\'$ || "$value" =~ ^\"(.*)\"$ ]]; then
+                        value="${BASH_REMATCH[1]}"
                     fi
+
                     env_vars["$key"]="$value"
                 fi
             done < "$env_file"
