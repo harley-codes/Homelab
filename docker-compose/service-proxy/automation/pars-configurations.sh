@@ -14,16 +14,20 @@ ENV_FILES=(
     "../.env"
 )
 
-# For each env file, parse each config file with envsubst using ONLY the env file's variables
+# For each env file, parse each config file with sed using ONLY the env file's variables
 for env in "${ENV_FILES[@]}"; do
     if [ -f "$env" ]; then
         echo "Using env file: $env"
-        # Read only variable names from env file
-        VARS=$(grep -v '^#' "$env" | cut -d= -f1 | xargs)
+        # Build sed expression from env file
+        SED_EXPR=""
+        while IFS='=' read -r key value; do
+            [[ "$key" =~ ^#.*$ || -z "$key" ]] && continue
+            SED_EXPR+="s|\\${$key}|$value|g;"
+        done < "$env"
         for config in "${!CONFIG_FILES[@]}"; do
             target="${CONFIG_FILES[$config]}"
-            echo "Parsing $config with envsubst and $env..."
-            (export $(grep -v '^#' "$env" | xargs) && envsubst "$(printf '${%s} ' $VARS)" < "$config" > "$target")
+            echo "Parsing $config with sed and $env..."
+            sed "$SED_EXPR" "$config" > "$target"
             echo "Output saved to $target"
         done
     fi
