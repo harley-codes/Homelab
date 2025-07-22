@@ -40,7 +40,7 @@ services:
       KOMODO_DATABASE_PASSWORD: ${VAR_LOCAL_KOMODO_DB_PASSWORD}
     volumes:
       - service-komodo-core-repo-cache:/repo-cache
-      - service-komodo-core-data:./komodo-core-data
+      - service-komodo-core-data:'./komodo-core-data'
     labels:
       komodo.skip:
       traefik.enable: "true"
