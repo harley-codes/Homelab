@@ -1,4 +1,4 @@
-# service-portainer
+# service-komodo
 
 ## 🌍 Installation 🌍
 
