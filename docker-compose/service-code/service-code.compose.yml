@@ -27,6 +27,7 @@ services:
       traefik.http.routers.service-code-vscode.tls: "true"
       traefik.http.routers.service-code-vscode.tls.certresolver: "cloudflare"
       traefik.http.services.service-code-vscode.loadbalancer.server.port: "8443"
+      traefik.http.routers.service-code-vscode.middlewares: "service-proxy-authelia@docker"
 
 networks:
   hotbox:
