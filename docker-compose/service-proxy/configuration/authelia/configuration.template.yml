@@ -13,7 +13,7 @@ totp:
   issuer: ${VAR_GLOBAL_AUTHELIA_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}
 
 authentication_backend:
-  password_reset.disable: true
+  password_reset.disable: ${VAR_LOCAL_AUTHELIA_AUTH_PASSWORD_RESET_DISABLE}
   refresh_interval: 5m
   file:
     path: "/config/users_database.yml"
@@ -59,8 +59,22 @@ storage:
     path: /var/authelia/db.sqlite3
 
 notifier:
-  filesystem:
-    filename: /var/authelia/notification.txt
+  smtp:
+    address: "${VAR_LOCAL_AUTHELIA_SMTP_ADDRESS}"
+    timeout: 5s
+    username: "${VAR_LOCAL_AUTHELIA_SMTP_USERNAME}"
+    password: "${VAR_LOCAL_AUTHELIA_SMTP_PASSWORD}"
+    sender: "${VAR_LOCAL_AUTHELIA_SMTP_SENDER}"
+    subject: "[Authelia] {title}"
+    startup_check_address: "${VAR_LOCAL_AUTHELIA_SMTP_STARTUP_CHECK_ADDRESS}"""
+    disable_require_tls: false
+    disable_starttls: false
+    disable_html_emails: false
+    tls:
+      server_name: "${VAR_LOCAL_AUTHELIA_SMTP_TLS_SERVER_NAME}"
+      skip_verify: false
+      minimum_version: "TLS1.2"
+      maximum_version: "TLS1.3"
 
 identity_providers:
   oidc:
