@@ -66,7 +66,7 @@ notifier:
     password: "${VAR_LOCAL_AUTHELIA_SMTP_PASSWORD}"
     sender: "${VAR_LOCAL_AUTHELIA_SMTP_SENDER}"
     subject: "[Authelia] {title}"
-    startup_check_address: "${VAR_LOCAL_AUTHELIA_SMTP_STARTUP_CHECK_ADDRESS}"""
+    startup_check_address: "${VAR_LOCAL_AUTHELIA_SMTP_STARTUP_CHECK_ADDRESS}"
     disable_require_tls: false
     disable_starttls: false
     disable_html_emails: false
