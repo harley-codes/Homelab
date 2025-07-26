@@ -83,6 +83,7 @@ services:
     security_opt:
       - no-new-privileges:true
     networks:
+      - pterodactyl0
       - hotbox
     # ports:
     # game server port range
@@ -103,6 +104,7 @@ services:
       - "service-pterodactyl-wing-temp:/tmp/pterodactyl/"
     labels:
       traefik.enable: "true"
+      traefik.network: "hotbox"
       traefik.http.routers.service-pterodactyl-wing.rule: "Host(`${VAR_GLOBAL_PTERODACTYL_WING_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}`)"
       traefik.http.routers.service-pterodactyl-wing.entrypoints: "websecure"
       traefik.http.routers.service-pterodactyl-wing.tls: "true"
@@ -117,6 +119,14 @@ services:
 networks:
   hotbox:
     external: true
+  pterodactyl0:
+    name: pterodactyl0
+    driver: bridge
+    ipam:
+      config:
+        - subnet: "172.21.0.0/16"
+    driver_opts:
+      com.docker.network.bridge.name: pterodactyl0
 
 volumes:
   service-pterodactyl-panel-var:
