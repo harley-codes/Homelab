@@ -11,9 +11,9 @@ services:
       - service-pterodactyl-cache
     networks:
       - hotbox
-    ports:
-      - "80:80"
-      - "443:443"
+    # ports:
+    #   - "80:80"
+    #   - "443:443"
     environment:
       APP_URL: "http://${VAR_GLOBAL_PTERODACTYL_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}"
       APP_TIMEZONE: "${VAR_GLOBAL_TIMEZONE}"
@@ -41,6 +41,13 @@ services:
       - "service-pterodactyl-panel-nginx:/etc/nginx/http.d/"
       - "service-pterodactyl-panel-certs:/etc/letsencrypt/"
       - "service-pterodactyl-panel-logs:/app/storage/logs"
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.service-pterodactyl-panel.rule: "Host(`${VAR_GLOBAL_PTERODACTYL_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}`)"
+      traefik.http.routers.service-pterodactyl-panel.entrypoints: "websecure"
+      traefik.http.routers.service-pterodactyl-panel.tls: "true"
+      traefik.http.routers.service-pterodactyl-panel.tls.certresolver: "cloudflare"
+      traefik.http.services.service-pterodactyl-panel.loadbalancer.server.port: "443"
 
   #Pterodactyl Database
   service-pterodactyl-db:
