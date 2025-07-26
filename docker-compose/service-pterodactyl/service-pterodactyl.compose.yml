@@ -84,9 +84,9 @@ services:
       - no-new-privileges:true
     networks:
       - hotbox
-    ports:
-      # game server port range
-      - "25560-25569:25560-25569"
+    # ports:
+    # game server port range
+    # - "25560-25569:25560-25569"
     tty: true
     environment:
       TZ: "${VAR_GLOBAL_TIMEZONE}"
