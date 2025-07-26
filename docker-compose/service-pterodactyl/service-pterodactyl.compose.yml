@@ -33,7 +33,7 @@ services:
       REDIS_HOST: "service-pterodactyl-cache"
       DB_HOST: "service-pterodactyl-db"
       DB_PORT: "3306"
-      DB_PASSWORD: "${VAR_LOCAL_PTERODACTYL_MYSQL_USER}"
+      DB_PASSWORD: "${VAR_LOCAL_PTERODACTYL_MYSQL_USER_PASSWORD}"
       DB_DATABASE: "${VAR_LOCAL_PTERODACTYL_MYSQL_DATABASE}"
       DB_USERNAME: "${VAR_LOCAL_PTERODACTYL_MYSQL_USER}"
     volumes:
