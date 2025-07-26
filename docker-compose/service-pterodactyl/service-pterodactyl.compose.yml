@@ -83,7 +83,7 @@ services:
     security_opt:
       - no-new-privileges:true
     networks:
-      - pterodactyl0
+      - wings0
       - hotbox
     # ports:
     # game server port range
@@ -119,14 +119,14 @@ services:
 networks:
   hotbox:
     external: true
-  pterodactyl0:
-    name: pterodactyl0
+  wings0:
+    name: wings0
     driver: bridge
     ipam:
       config:
         - subnet: "172.21.0.0/16"
     driver_opts:
-      com.docker.network.bridge.name: pterodactyl0
+      com.docker.network.bridge.name: wings0
 
 volumes:
   service-pterodactyl-panel-var:
