@@ -11,9 +11,6 @@ services:
       - service-pterodactyl-cache
     networks:
       - hotbox
-    # ports:
-    #   - "80:80"
-    #   - "443:443"
     environment:
       APP_URL: "http://${VAR_GLOBAL_PTERODACTYL_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}"
       APP_TIMEZONE: "${VAR_GLOBAL_TIMEZONE}"
@@ -78,33 +75,41 @@ services:
     networks:
       - hotbox
 
-  # service-pterodactyl-wing:
-  #   image: ghcr.io/pterodactyl/wings:latest
-  #   container_name: service-pterodactyl-wing
-  #   restart: unless-stopped
-  #   security_opt:
-  #     - no-new-privileges:true
-  #   networks:
-  #     - hotbox
-  #   ports:
-  #     - "8080:8080"
-  #     - "2022:2022"
-  #   tty: true
-  #   environment:
-  #     TZ: "UTC"
-  #     WINGS_UID: 988
-  #     WINGS_GID: 988
-  #     WINGS_USERNAME: pterodactyl
-  #   volumes:
-  #     - "/var/run/docker.sock:/var/run/docker.sock"
-  #     - "/var/lib/docker/containers/:/var/lib/docker/containers/"
-  #     - "/etc/pterodactyl/:/etc/pterodactyl/"
-  #     - "/var/lib/pterodactyl/:/var/lib/pterodactyl/"
-  #     - "/var/log/pterodactyl/:/var/log/pterodactyl/"
-  #     - "/tmp/pterodactyl/:/tmp/pterodactyl/"
-  #     - "/etc/ssl/certs:/etc/ssl/certs:ro"
-  #     # Required for ssl if you use let's encrypt. uncomment to use.
-  #     #- "/etc/letsencrypt/:/etc/letsencrypt/"
+  #Pterodactyl Wing
+  service-pterodactyl-wing:
+    image: ghcr.io/pterodactyl/wings:latest
+    container_name: service-pterodactyl-wing
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - hotbox
+    tty: true
+    environment:
+      TZ: "${VAR_GLOBAL_TIMEZONE}"
+      WINGS_UID: 988
+      WINGS_GID: 988
+      WINGS_USERNAME: pterodactyl
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "/var/lib/docker/containers/:/var/lib/docker/containers/"
+      - "/etc/ssl/certs:/etc/ssl/certs:ro"
+      - "service-pterodactyl-wing-etc:/etc/pterodactyl/"
+      - "service-pterodactyl-wing-lib:/var/lib/pterodactyl/"
+      - "service-pterodactyl-wing-log:/var/log/pterodactyl/"
+      - "service-pterodactyl-wing-temp:/tmp/pterodactyl/"
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.service-pterodactyl-wing.rule: "Host(`${VAR_GLOBAL_PTERODACTYL_WING_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}`)"
+      traefik.http.routers.service-pterodactyl-wing.entrypoints: "websecure"
+      traefik.http.routers.service-pterodactyl-wing.tls: "true"
+      traefik.http.routers.service-pterodactyl-wing.tls.certresolver: "cloudflare"
+      traefik.http.services.service-pterodactyl-wing.loadbalancer.server.port: "8080"
+      traefik.http.routers.service-pterodactyl-wing-sftp.rule: "HostSNI(`${VAR_GLOBAL_PTERODACTYL_WING_SFTP_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}`)"
+      traefik.http.routers.service-pterodactyl-wing-sftp.entrypoints: "sftp"
+      traefik.http.routers.service-pterodactyl-wing-sftp.tls: "true"
+      traefik.http.routers.service-pterodactyl-wing-sftp.tls.certresolver: "cloudflare"
+      traefik.http.services.service-pterodactyl-wing-sftp.loadbalancer.server.port: "2022"
 
 networks:
   hotbox:
@@ -116,3 +121,7 @@ volumes:
   service-pterodactyl-panel-certs:
   service-pterodactyl-panel-logs:
   service-pterodactyl-db-data:
+  service-pterodactyl-wing-etc:
+  service-pterodactyl-wing-lib:
+  service-pterodactyl-wing-log:
+  service-pterodactyl-wing-temp:

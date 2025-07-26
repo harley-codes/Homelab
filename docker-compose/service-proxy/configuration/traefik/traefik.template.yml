@@ -16,6 +16,8 @@ entryPoints:
           scheme: https
   websecure:
     address: ":443"
+  sftp:
+    address: ":2022"
 
 providers:
   docker:
