@@ -34,6 +34,7 @@ services:
       DB_PASSWORD: "${VAR_LOCAL_PTERODACTYL_MYSQL_USER_PASSWORD}"
       DB_DATABASE: "${VAR_LOCAL_PTERODACTYL_MYSQL_DATABASE}"
       DB_USERNAME: "${VAR_LOCAL_PTERODACTYL_MYSQL_USER}"
+      # TRUSTED_PROXIES: "*"
     volumes:
       - "service-pterodactyl-panel-var:/app/var/"
       - "service-pterodactyl-panel-nginx:/etc/nginx/http.d/"
@@ -106,11 +107,11 @@ services:
       traefik.http.routers.service-pterodactyl-wing.tls: "true"
       traefik.http.routers.service-pterodactyl-wing.tls.certresolver: "cloudflare"
       traefik.http.services.service-pterodactyl-wing.loadbalancer.server.port: "8080"
-      traefik.http.routers.service-pterodactyl-wing-sftp.rule: "HostSNI(`${VAR_GLOBAL_PTERODACTYL_WING_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}`)"
-      traefik.http.routers.service-pterodactyl-wing-sftp.entrypoints: "sftp"
-      traefik.http.routers.service-pterodactyl-wing-sftp.tls: "true"
-      traefik.http.routers.service-pterodactyl-wing-sftp.tls.certresolver: "cloudflare"
-      traefik.http.services.service-pterodactyl-wing-sftp.loadbalancer.server.port: "2022"
+      # traefik.http.routers.service-pterodactyl-wing-sftp.rule: "HostSNI(`${VAR_GLOBAL_PTERODACTYL_WING_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}`)"
+      # traefik.http.routers.service-pterodactyl-wing-sftp.entrypoints: "sftp"
+      # traefik.http.routers.service-pterodactyl-wing-sftp.tls: "true"
+      # traefik.http.routers.service-pterodactyl-wing-sftp.tls.certresolver: "cloudflare"
+      # traefik.http.services.service-pterodactyl-wing-sftp.loadbalancer.server.port: "2022"
 
 networks:
   hotbox:
