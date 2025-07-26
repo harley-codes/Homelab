@@ -83,11 +83,7 @@ services:
     security_opt:
       - no-new-privileges:true
     networks:
-      - wings0
       - hotbox
-    # ports:
-    # game server port range
-    # - "25560-25569:25560-25569"
     tty: true
     environment:
       TZ: "${VAR_GLOBAL_TIMEZONE}"
@@ -109,7 +105,7 @@ services:
       traefik.http.routers.service-pterodactyl-wing.entrypoints: "websecure"
       traefik.http.routers.service-pterodactyl-wing.tls: "true"
       traefik.http.routers.service-pterodactyl-wing.tls.certresolver: "cloudflare"
-      traefik.http.services.service-pterodactyl-wing.loadbalancer.server.port: "8089"
+      traefik.http.services.service-pterodactyl-wing.loadbalancer.server.port: "8080"
       traefik.http.routers.service-pterodactyl-wing-sftp.rule: "HostSNI(`${VAR_GLOBAL_PTERODACTYL_WING_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}`)"
       traefik.http.routers.service-pterodactyl-wing-sftp.entrypoints: "sftp"
       traefik.http.routers.service-pterodactyl-wing-sftp.tls: "true"
@@ -119,14 +115,6 @@ services:
 networks:
   hotbox:
     external: true
-  wings0:
-    name: wings0
-    driver: bridge
-    ipam:
-      config:
-        - subnet: "172.21.0.0/16"
-    driver_opts:
-      com.docker.network.bridge.name: wings0
 
 volumes:
   service-pterodactyl-panel-var:
