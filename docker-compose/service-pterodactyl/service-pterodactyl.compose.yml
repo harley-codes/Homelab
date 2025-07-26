@@ -1,0 +1,110 @@
+services:
+  #Pterodactyl Panel
+  service-pterodactyl-panel:
+    image: ghcr.io/pterodactyl/panel:latest
+    container_name: service-pterodactyl-panel
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    depends_on:
+      - service-pterodactyl-db
+      - service-pterodactyl-cache
+    networks:
+      - hotbox
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      APP_URL: "http://${VAR_GLOBAL_PTERODACTYL_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}"
+      APP_TIMEZONE: "${VAR_GLOBAL_TIMEZONE}"
+      APP_SERVICE_AUTHOR: "${VAR_LOCAL_PTERODACTYL_SERVICE_AUTHOR}"
+      MAIL_FROM: "${VAR_LOCAL_PTERODACTYL_SMTP_SENDER}"
+      MAIL_DRIVER: "smtp"
+      MAIL_HOST: "${VAR_LOCAL_PTERODACTYL_SMTP_SERVER_HOST}"
+      MAIL_PORT: "${VAR_LOCAL_PTERODACTYL_SMTP_SERVER_PORT}"
+      MAIL_USERNAME: "${VAR_LOCAL_PTERODACTYL_SMTP_USERNAME}"
+      MAIL_PASSWORD: "${VAR_LOCAL_PTERODACTYL_SMTP_PASSWORD}"
+      MAIL_ENCRYPTION: ${VAR_LOCAL_PTERODACTYL_SMTP_ENCRYPTION}
+      APP_ENV: "production"
+      APP_ENVIRONMENT_ONLY: "false"
+      CACHE_DRIVER: "redis"
+      SESSION_DRIVER: "redis"
+      QUEUE_DRIVER: "redis"
+      REDIS_HOST: "service-pterodactyl-cache"
+      DB_HOST: "service-pterodactyl-db"
+      DB_PORT: "3306"
+      DB_PASSWORD: "${VAR_LOCAL_PTERODACTYL_MYSQL_USER}"
+      DB_DATABASE: "${VAR_LOCAL_PTERODACTYL_MYSQL_DATABASE}"
+      DB_USERNAME: "${VAR_LOCAL_PTERODACTYL_MYSQL_USER}"
+    volumes:
+      - "service-pterodactyl-panel-var:/app/var/"
+      - "service-pterodactyl-panel-nginx:/etc/nginx/http.d/"
+      - "service-pterodactyl-panel-certs:/etc/letsencrypt/"
+      - "service-pterodactyl-panel-logs:/app/storage/logs"
+
+  #Pterodactyl Database
+  service-pterodactyl-db:
+    image: mariadb:10.5
+    container_name: service-pterodactyl-db
+    restart: unless-stopped
+    command: --default-authentication-plugin=mysql_native_password
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - hotbox
+    environment:
+      MYSQL_USER: "${VAR_LOCAL_PTERODACTYL_MYSQL_USER}"
+      MYSQL_PASSWORD: "${VAR_LOCAL_PTERODACTYL_MYSQL_USER_PASSWORD}"
+      MYSQL_ROOT_PASSWORD: "${VAR_LOCAL_PTERODACTYL_MYSQL_ROOT_PASSWORD}"
+      MYSQL_DATABASE: "${VAR_LOCAL_PTERODACTYL_MYSQL_DATABASE}"
+    volumes:
+      - "service-pterodactyl-db-data:/var/lib/mysql"
+
+  #Pterodactyl Cache
+  service-pterodactyl-cache:
+    image: redis:alpine
+    container_name: service-pterodactyl-cache
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - hotbox
+
+  # service-pterodactyl-wing:
+  #   image: ghcr.io/pterodactyl/wings:latest
+  #   container_name: service-pterodactyl-wing
+  #   restart: unless-stopped
+  #   security_opt:
+  #     - no-new-privileges:true
+  #   networks:
+  #     - hotbox
+  #   ports:
+  #     - "8080:8080"
+  #     - "2022:2022"
+  #   tty: true
+  #   environment:
+  #     TZ: "UTC"
+  #     WINGS_UID: 988
+  #     WINGS_GID: 988
+  #     WINGS_USERNAME: pterodactyl
+  #   volumes:
+  #     - "/var/run/docker.sock:/var/run/docker.sock"
+  #     - "/var/lib/docker/containers/:/var/lib/docker/containers/"
+  #     - "/etc/pterodactyl/:/etc/pterodactyl/"
+  #     - "/var/lib/pterodactyl/:/var/lib/pterodactyl/"
+  #     - "/var/log/pterodactyl/:/var/log/pterodactyl/"
+  #     - "/tmp/pterodactyl/:/tmp/pterodactyl/"
+  #     - "/etc/ssl/certs:/etc/ssl/certs:ro"
+  #     # Required for ssl if you use let's encrypt. uncomment to use.
+  #     #- "/etc/letsencrypt/:/etc/letsencrypt/"
+
+networks:
+  hotbox:
+    external: true
+
+volumes:
+  service-pterodactyl-panel-var:
+  service-pterodactyl-panel-nginx:
+  service-pterodactyl-panel-certs:
+  service-pterodactyl-panel-logs:
+  service-pterodactyl-db-data:
