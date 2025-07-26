@@ -40,6 +40,7 @@ services:
       - "443:443/tcp"
       - "443:443/udp"
       - "8080:8080"
+      - "2022:2022"
     environment:
       - CF_API_EMAIL=${VAR_LOCAL_CLOUDFLARE_API_EMAIL}
       - CF_DNS_API_TOKEN=${VAR_LOCAL_CLOUDFLARE_API_DNS_TOKEN}
