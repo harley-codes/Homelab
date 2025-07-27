@@ -121,7 +121,7 @@ services:
 networks:
   hotbox:
     external: true
-  wings0:
+  pterodactyl_nw:
     name: pterodactyl_nw
     driver: bridge
     ipam:
