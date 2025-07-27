@@ -34,7 +34,6 @@ services:
       DB_PASSWORD: "${VAR_LOCAL_PTERODACTYL_MYSQL_USER_PASSWORD}"
       DB_DATABASE: "${VAR_LOCAL_PTERODACTYL_MYSQL_DATABASE}"
       DB_USERNAME: "${VAR_LOCAL_PTERODACTYL_MYSQL_USER}"
-      TRUSTED_PROXIES: "*"
     volumes:
       - "service-pterodactyl-panel-var:/app/var/"
       - "service-pterodactyl-panel-nginx:/etc/nginx/http.d/"
@@ -97,13 +96,9 @@ services:
       - "/var/lib/docker/containers/:/var/lib/docker/containers/"
       - "/etc/ssl/certs:/etc/ssl/certs:ro"
       - "/etc/pterodactyl/:/etc/pterodactyl/"
-      # - "service-pterodactyl-wing-etc:/etc/pterodactyl/"
       - "/var/lib/pterodactyl/:/var/lib/pterodactyl/"
-      # - "service-pterodactyl-wing-lib:/var/lib/pterodactyl/"
       - "/var/log/pterodactyl/:/var/log/pterodactyl/"
-      # - "service-pterodactyl-wing-log:/var/log/pterodactyl/"
       - "/tmp/pterodactyl/:/tmp/pterodactyl/"
-      # - "service-pterodactyl-wing-temp:/tmp/pterodactyl/"
     labels:
       traefik.enable: "true"
       traefik.network: "hotbox"
@@ -121,14 +116,6 @@ services:
 networks:
   hotbox:
     external: true
-  # pterodactyl_nw:
-  #   name: pterodactyl_nw
-  #   driver: bridge
-  #   ipam:
-  #     config:
-  #       - subnet: "172.32.0.0/16"
-  #   driver_opts:
-  #     com.docker.network.bridge.name: pterodactyl_nw
 
 volumes:
   service-pterodactyl-panel-var:
