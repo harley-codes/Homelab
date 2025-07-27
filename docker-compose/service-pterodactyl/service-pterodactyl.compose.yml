@@ -34,7 +34,7 @@ services:
       DB_PASSWORD: "${VAR_LOCAL_PTERODACTYL_MYSQL_USER_PASSWORD}"
       DB_DATABASE: "${VAR_LOCAL_PTERODACTYL_MYSQL_DATABASE}"
       DB_USERNAME: "${VAR_LOCAL_PTERODACTYL_MYSQL_USER}"
-      # TRUSTED_PROXIES: "*"
+      TRUSTED_PROXIES: "*"
     volumes:
       - "service-pterodactyl-panel-var:/app/var/"
       - "service-pterodactyl-panel-nginx:/etc/nginx/http.d/"
