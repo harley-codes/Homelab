@@ -106,7 +106,7 @@ services:
       # - "service-pterodactyl-wing-temp:/tmp/pterodactyl/"
     labels:
       traefik.enable: "true"
-      traefik.network: "hotbox"
+      # traefik.network: "hotbox"
       traefik.http.routers.service-pterodactyl-wing.rule: "Host(`${VAR_GLOBAL_PTERODACTYL_WING_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}`)"
       traefik.http.routers.service-pterodactyl-wing.entrypoints: "websecure"
       traefik.http.routers.service-pterodactyl-wing.tls: "true"
@@ -121,14 +121,14 @@ services:
 networks:
   hotbox:
     external: true
-  pterodactyl_nw:
-    name: pterodactyl_nw
-    driver: bridge
-    ipam:
-      config:
-        - subnet: "172.32.0.0/16"
-    driver_opts:
-      com.docker.network.bridge.name: pterodactyl_nw
+  # pterodactyl_nw:
+  #   name: pterodactyl_nw
+  #   driver: bridge
+  #   ipam:
+  #     config:
+  #       - subnet: "172.32.0.0/16"
+  #   driver_opts:
+  #     com.docker.network.bridge.name: pterodactyl_nw
 
 volumes:
   service-pterodactyl-panel-var:
