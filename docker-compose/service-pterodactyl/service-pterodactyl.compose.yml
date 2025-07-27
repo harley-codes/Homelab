@@ -107,11 +107,11 @@ services:
       traefik.http.routers.service-pterodactyl-wing.tls: "true"
       traefik.http.routers.service-pterodactyl-wing.tls.certresolver: "cloudflare"
       traefik.http.services.service-pterodactyl-wing.loadbalancer.server.port: "8080"
-      traefik.http.routers.service-pterodactyl-wing-sftp.rule: "HostSNI(`${VAR_GLOBAL_PTERODACTYL_WING_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}`)"
-      traefik.http.routers.service-pterodactyl-wing-sftp.entrypoints: "sftp"
-      traefik.http.routers.service-pterodactyl-wing-sftp.tls: "true"
-      traefik.http.routers.service-pterodactyl-wing-sftp.tls.certresolver: "cloudflare"
-      traefik.http.services.service-pterodactyl-wing-sftp.loadbalancer.server.port: "2022"
+      traefik.tcp.routers.service-pterodactyl-wing-sftp.rule: "HostSNI(`${VAR_GLOBAL_PTERODACTYL_WING_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}`)"
+      traefik.tcp.routers.service-pterodactyl-wing-sftp.entrypoints: "sftp"
+      traefik.tcp.routers.service-pterodactyl-wing-sftp.tls: "true"
+      traefik.tcp.routers.service-pterodactyl-wing-sftp.tls.certresolver: "cloudflare"
+      traefik.tcp.services.service-pterodactyl-wing-sftp.loadbalancer.server.port: "2022"
 
 networks:
   hotbox:
