@@ -99,8 +99,10 @@ services:
       # - "service-pterodactyl-wing-etc:/etc/pterodactyl/"
       - "/var/lib/pterodactyl/:/var/lib/pterodactyl/"
       # - "service-pterodactyl-wing-lib:/var/lib/pterodactyl/"
-      - "service-pterodactyl-wing-log:/var/log/pterodactyl/"
-      - "service-pterodactyl-wing-temp:/tmp/pterodactyl/"
+      - "/var/log/pterodactyl/:/var/log/pterodactyl/"
+      # - "service-pterodactyl-wing-log:/var/log/pterodactyl/"
+      - "/tmp/pterodactyl/:/tmp/pterodactyl/"
+      # - "service-pterodactyl-wing-temp:/tmp/pterodactyl/"
     labels:
       traefik.enable: "true"
       traefik.network: "hotbox"
