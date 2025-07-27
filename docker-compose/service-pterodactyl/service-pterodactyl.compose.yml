@@ -96,8 +96,8 @@ services:
       - "/var/lib/docker/containers/:/var/lib/docker/containers/"
       - "/etc/ssl/certs:/etc/ssl/certs:ro"
       - "service-pterodactyl-wing-etc:/etc/pterodactyl/"
-      - "/var/lib/pterodactyl/:/var/lib/pterodactyl/"
-      # - "service-pterodactyl-wing-lib:/var/lib/pterodactyl/"
+      # - "/var/lib/pterodactyl/:/var/lib/pterodactyl/"
+      - "service-pterodactyl-wing-lib:/var/lib/pterodactyl/"
       - "service-pterodactyl-wing-log:/var/log/pterodactyl/"
       - "service-pterodactyl-wing-temp:/tmp/pterodactyl/"
     labels:
