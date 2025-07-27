@@ -85,7 +85,7 @@ services:
       - no-new-privileges:true
     networks:
       - hotbox
-      - pterodactyl_nw
+      # - pterodactyl_nw
     tty: true
     environment:
       TZ: "${VAR_GLOBAL_TIMEZONE}"
@@ -121,14 +121,14 @@ services:
 networks:
   hotbox:
     external: true
-  pterodactyl_nw:
-    name: pterodactyl_nw
-    driver: bridge
-    ipam:
-      config:
-        - subnet: "172.32.0.0/16"
-    driver_opts:
-      com.docker.network.bridge.name: pterodactyl_nw
+  # pterodactyl_nw:
+  #   name: pterodactyl_nw
+  #   driver: bridge
+  #   ipam:
+  #     config:
+  #       - subnet: "172.32.0.0/16"
+  #   driver_opts:
+  #     com.docker.network.bridge.name: pterodactyl_nw
 
 volumes:
   service-pterodactyl-panel-var:
