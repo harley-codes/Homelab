@@ -1,0 +1,31 @@
+services:
+  service-proxy-whoami-unsecure:
+    image: traefik/whoami
+    container_name: service-proxy-whoami-unsecure
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - hotbox
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.service-proxy-whoami-unsecure.rule: "Host(`${VAR_GLOBAL_WHOAMI_UNSECURE_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}`)"
+      traefik.http.routers.service-proxy-whoami-unsecure.entrypoints: "websecure"
+      traefik.http.routers.service-proxy-whoami-unsecure.tls: "true"
+      traefik.http.routers.service-proxy-whoami-unsecure.tls.certresolver: "cloudflare"
+      traefik.http.routers.service-proxy-whoami-unsecure.middlewares: "service-proxy-authelia@docker"
+  service-proxy-whoami-secure:
+    image: traefik/whoami
+    container_name: service-proxy-whoami-secure
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - hotbox
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.service-proxy-whoami-secure.rule: "Host(`${VAR_GLOBAL_WHOAMI_SECURE_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}`)"
+      traefik.http.routers.service-proxy-whoami-secure.entrypoints: "websecure"
+      traefik.http.routers.service-proxy-whoami-secure.tls: "true"
+      traefik.http.routers.service-proxy-whoami-secure.tls.certresolver: "cloudflare"
+      traefik.http.routers.service-proxy-whoami-secure.middlewares: "service-proxy-authelia@docker"
