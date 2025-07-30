@@ -46,6 +46,7 @@ services:
       - CF_DNS_API_TOKEN=${VAR_LOCAL_CLOUDFLARE_API_DNS_TOKEN}
     volumes:
       - ./configuration/traefik:/etc/traefik:ro
+      - service-proxy-traefik-dynamic-manual:/etc/traefik/dynamic:ro
       - service-proxy-traefik-output:/var/traefik:rw
       - /var/run/docker.sock:/var/run/docker.sock:ro
     labels:
@@ -64,3 +65,4 @@ networks:
 volumes:
   service-proxy-authelia-output:
   service-proxy-traefik-output:
+  service-proxy-traefik-dynamic-manual:
