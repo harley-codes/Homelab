@@ -4,12 +4,16 @@
     "certresolver",
     "contoso",
     "forwardauth",
+    "gluetun",
     "healthcheck",
     "Homelab",
     "komodo",
+    "lscr",
     "overseerr",
     "PGID",
     "PUID",
+    "radarr",
+    "sonarr",
     "websecure"
   ]
 }
