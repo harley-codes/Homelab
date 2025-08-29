@@ -7,6 +7,9 @@
     "healthcheck",
     "Homelab",
     "komodo",
+    "overseerr",
+    "PGID",
+    "PUID",
     "websecure"
   ]
 }

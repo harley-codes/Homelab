@@ -30,6 +30,10 @@ Get started here with the overall [readme](docker-compose/readme.md).
 		<td>Streaming | HW Transcoding</td>
 	</tr>
 	<tr>
+		<td><a href="docker-compose/service-torrent/service-torrent.compose.yml">Torrent Services</a></td>
+		<td>Download | Request</td>
+	</tr>
+	<tr>
 		<td><a href="docker-compose/service-portainer/readme.md">Portainer</a></td>
 		<td>Docker Compose Web GUI</td>
 	</tr>
