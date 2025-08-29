@@ -93,7 +93,7 @@ services:
       traefik.http.routers.service-torrent-sonarr.tls: "true"
       traefik.http.routers.service-torrent-sonarr.tls.certresolver: "cloudflare"
       traefik.http.services.service-torrent-sonarr.loadbalancer.server.port: "8989"
-      traefik.http.routers.service-torrent-transmission.middlewares: "service-proxy-authelia@docker"
+      traefik.http.routers.service-torrent-sonarr.middlewares: "service-proxy-authelia@docker"
 
   service-torrent-radarr:
     image: lscr.io/linuxserver/radarr:latest
@@ -118,7 +118,7 @@ services:
       traefik.http.routers.service-torrent-radarr.tls: "true"
       traefik.http.routers.service-torrent-radarr.tls.certresolver: "cloudflare"
       traefik.http.services.service-torrent-radarr.loadbalancer.server.port: "7878"
-      traefik.http.routers.service-torrent-transmission.middlewares: "service-proxy-authelia@docker"
+      traefik.http.routers.service-torrent-radarr.middlewares: "service-proxy-authelia@docker"
 
 networks:
   hotbox:
