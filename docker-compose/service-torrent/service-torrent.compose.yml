@@ -72,6 +72,7 @@ services:
       traefik.http.routers.service-torrent-overseerr.rule: "Host(`${VAR_GLOBAL_OVERSEERR_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}`)"
       traefik.http.routers.service-torrent-overseerr.entrypoints: "websecure"
       traefik.http.routers.service-torrent-overseerr.tls: "true"
+      traefik.http.routers.service-torrent-overseerr.tls.certresolver: "cloudflare"
       traefik.http.services.service-torrent-overseerr.loadbalancer.server.port: "5055"
 
   service-torrent-sonarr:
