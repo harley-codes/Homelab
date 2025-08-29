@@ -63,6 +63,8 @@ services:
     environment:
       - LOG_LEVEL=info
       - TZ=${VAR_GLOBAL_TIMEZONE}
+    ports:
+      - 5055:5055
     volumes:
       - service-torrent-overseerr-config:/app/config
     labels:
