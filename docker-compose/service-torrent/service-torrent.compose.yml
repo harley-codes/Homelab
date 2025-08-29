@@ -138,6 +138,18 @@ services:
     volumes:
       - service-torrent-prowlarr-config:/config
 
+  service-torrent-flaresolverr:
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    container_name: service-torrent-flaresolverr
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    network_mode: "service:service-torrent-gluetun"
+    environment:
+      - LOG_LEVEL=info
+      - TZ=${VAR_GLOBAL_TIMEZONE}
+    # Default port inside is 8191, no need to expose unless you want external access
+
 networks:
   hotbox:
     external: true
