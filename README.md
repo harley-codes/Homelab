@@ -46,3 +46,16 @@ Get started here with the overall [readme](docker-compose/readme.md).
 		<td>Private Game Server Hosting</td>
 	</tr>
 </table>
+
+## Linux Guides
+
+<table>
+	<tr>
+		<th>Guide</th>
+		<th>Description</th>
+	</tr>
+	<tr>
+		<td><a href="linux-guides/mount-smb/mount-smb.md">Mount SMB</a></td>
+		<td>Mount share with <i>fstab</i></td>
+	</tr>
+</table>
