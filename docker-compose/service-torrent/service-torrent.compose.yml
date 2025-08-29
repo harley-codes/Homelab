@@ -46,8 +46,8 @@ services:
       - PGID=1000
       - TZ=${VAR_GLOBAL_TIMEZONE}
     volumes:
-      - service-torrent-transmission-config:/config
-      - ${VAR_LOCAL_DOWNLOAD_PATH}:/downloads
+      - service-torrent-transmission-config:/config:rw
+      - ${VAR_LOCAL_DOWNLOAD_PATH}:/downloads:rw
 
   service-torrent-overseerr:
     image: sctx/overseerr:latest
