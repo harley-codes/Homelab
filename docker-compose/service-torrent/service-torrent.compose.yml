@@ -25,12 +25,33 @@ services:
       - SERVER_COUNTRIES=${VAR_LOCAL_SERVER_COUNTRIES}
     labels:
       traefik.enable: "true"
+      # transmission
       traefik.http.routers.service-torrent-transmission.rule: "Host(`${VAR_GLOBAL_TORRENT_CLIENT_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}`)"
       traefik.http.routers.service-torrent-transmission.entrypoints: "websecure"
       traefik.http.routers.service-torrent-transmission.tls: "true"
       traefik.http.routers.service-torrent-transmission.tls.certresolver: "cloudflare"
       traefik.http.services.service-torrent-transmission.loadbalancer.server.port: "9091"
       traefik.http.routers.service-torrent-transmission.middlewares: "service-proxy-authelia@docker"
+      # overseerr
+      traefik.http.routers.service-torrent-overseerr.rule: "Host(`${VAR_GLOBAL_OVERSEERR_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}`)"
+      traefik.http.routers.service-torrent-overseerr.entrypoints: "websecure"
+      traefik.http.routers.service-torrent-overseerr.tls: "true"
+      traefik.http.routers.service-torrent-overseerr.tls.certresolver: "cloudflare"
+      traefik.http.services.service-torrent-overseerr.loadbalancer.server.port: "5055"
+      # sonarr
+      traefik.http.routers.service-torrent-sonarr.rule: "Host(`${VAR_GLOBAL_SONARR_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}`)"
+      traefik.http.routers.service-torrent-sonarr.entrypoints: "websecure"
+      traefik.http.routers.service-torrent-sonarr.tls: "true"
+      traefik.http.routers.service-torrent-sonarr.tls.certresolver: "cloudflare"
+      traefik.http.services.service-torrent-sonarr.loadbalancer.server.port: "8989"
+      traefik.http.routers.service-torrent-sonarr.middlewares: "service-proxy-authelia@docker"
+      # radarr
+      traefik.http.routers.service-torrent-radarr.rule: "Host(`${VAR_GLOBAL_RADARR_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}`)"
+      traefik.http.routers.service-torrent-radarr.entrypoints: "websecure"
+      traefik.http.routers.service-torrent-radarr.tls: "true"
+      traefik.http.routers.service-torrent-radarr.tls.certresolver: "cloudflare"
+      traefik.http.services.service-torrent-radarr.loadbalancer.server.port: "7878"
+      traefik.http.routers.service-torrent-radarr.middlewares: "service-proxy-authelia@docker"
 
   service-torrent-transmission:
     image: linuxserver/transmission
@@ -55,20 +76,12 @@ services:
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
-    networks:
-      - hotbox
+    network_mode: "service:service-torrent-gluetun"
     environment:
       - LOG_LEVEL=info
       - TZ=${VAR_GLOBAL_TIMEZONE}
     volumes:
       - service-torrent-overseerr-config:/app/config
-    labels:
-      traefik.enable: "true"
-      traefik.http.routers.service-torrent-overseerr.rule: "Host(`${VAR_GLOBAL_OVERSEERR_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}`)"
-      traefik.http.routers.service-torrent-overseerr.entrypoints: "websecure"
-      traefik.http.routers.service-torrent-overseerr.tls: "true"
-      traefik.http.routers.service-torrent-overseerr.tls.certresolver: "cloudflare"
-      traefik.http.services.service-torrent-overseerr.loadbalancer.server.port: "5055"
 
   service-torrent-sonarr:
     image: lscr.io/linuxserver/sonarr:latest
@@ -76,8 +89,7 @@ services:
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
-    networks:
-      - hotbox
+    network_mode: "service:service-torrent-gluetun"
     environment:
       - PUID=1000
       - PGID=1000
@@ -86,14 +98,6 @@ services:
       - service-torrent-sonarr-config:/config
       - ${VAR_LOCAL_DOWNLOAD_PATH}:/downloads
       - ${VAR_LOCAL_TV_PATH}:/tv
-    labels:
-      traefik.enable: "true"
-      traefik.http.routers.service-torrent-sonarr.rule: "Host(`${VAR_GLOBAL_SONARR_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}`)"
-      traefik.http.routers.service-torrent-sonarr.entrypoints: "websecure"
-      traefik.http.routers.service-torrent-sonarr.tls: "true"
-      traefik.http.routers.service-torrent-sonarr.tls.certresolver: "cloudflare"
-      traefik.http.services.service-torrent-sonarr.loadbalancer.server.port: "8989"
-      traefik.http.routers.service-torrent-sonarr.middlewares: "service-proxy-authelia@docker"
 
   service-torrent-radarr:
     image: lscr.io/linuxserver/radarr:latest
@@ -101,8 +105,7 @@ services:
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
-    networks:
-      - hotbox
+    network_mode: "service:service-torrent-gluetun"
     environment:
       - PUID=1000
       - PGID=1000
@@ -111,14 +114,6 @@ services:
       - service-torrent-radarr-config:/config
       - ${VAR_LOCAL_DOWNLOAD_PATH}:/downloads
       - ${VAR_LOCAL_MOVIES_PATH}:/movies
-    labels:
-      traefik.enable: "true"
-      traefik.http.routers.service-torrent-radarr.rule: "Host(`${VAR_GLOBAL_RADARR_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}`)"
-      traefik.http.routers.service-torrent-radarr.entrypoints: "websecure"
-      traefik.http.routers.service-torrent-radarr.tls: "true"
-      traefik.http.routers.service-torrent-radarr.tls.certresolver: "cloudflare"
-      traefik.http.services.service-torrent-radarr.loadbalancer.server.port: "7878"
-      traefik.http.routers.service-torrent-radarr.middlewares: "service-proxy-authelia@docker"
 
 networks:
   hotbox:
