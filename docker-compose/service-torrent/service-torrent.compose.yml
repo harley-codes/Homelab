@@ -54,6 +54,13 @@ services:
       traefik.http.routers.service-torrent-radarr.tls.certresolver: "cloudflare"
       traefik.http.routers.service-torrent-radarr.service: "service-torrent-radarr"
       traefik.http.services.service-torrent-radarr.loadbalancer.server.port: "7878"
+      # prowlarr
+      traefik.http.routers.service-torrent-prowlarr.rule: "Host(`${VAR_GLOBAL_PROWLARR_SUBDOMAIN}.${VAR_GLOBAL_ROOT_DOMAIN}`)"
+      traefik.http.routers.service-torrent-prowlarr.entrypoints: "websecure"
+      traefik.http.routers.service-torrent-prowlarr.tls: "true"
+      traefik.http.routers.service-torrent-prowlarr.tls.certresolver: "cloudflare"
+      traefik.http.routers.service-torrent-prowlarr.service: "service-torrent-prowlarr"
+      traefik.http.services.service-torrent-prowlarr.loadbalancer.server.port: "9696"
 
   service-torrent-transmission:
     image: linuxserver/transmission
@@ -117,6 +124,20 @@ services:
       - ${VAR_LOCAL_DOWNLOAD_PATH}:/downloads
       - ${VAR_LOCAL_MOVIES_PATH}:/movies
 
+  service-torrent-prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: service-torrent-prowlarr
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    network_mode: "service:service-torrent-gluetun"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=${VAR_GLOBAL_TIMEZONE}
+    volumes:
+      - service-torrent-prowlarr-config:/config
+
 networks:
   hotbox:
     external: true
@@ -127,3 +148,4 @@ volumes:
   service-torrent-overseerr-config:
   service-torrent-sonarr-config:
   service-torrent-radarr-config:
+  service-torrent-prowlarr-config:
