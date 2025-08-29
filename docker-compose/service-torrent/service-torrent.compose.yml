@@ -14,7 +14,7 @@ services:
     devices:
       - /dev/net/tun
     ports:
-      - "90210:9091"
+      # - "9069:9091"
       - "51413:51413"
       - "51413:51413/udp"
     volumes:
